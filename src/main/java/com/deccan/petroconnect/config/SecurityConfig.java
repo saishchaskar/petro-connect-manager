@@ -59,10 +59,7 @@ public class SecurityConfig {
                             response.setStatus(403);
                             response.getWriter().write("{\"error\":\"Forbidden\"}");
                         }))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/api/auth/register").permitAll()
-                        .anyRequest().authenticated());
+                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
 
         return http.build();
     }

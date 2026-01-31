@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -38,5 +39,11 @@ public class DsrController {
     @GetMapping
     public ResponseEntity<List<DsrEntry>> getEntries() {
         return ResponseEntity.ok(dsrService.getAllEntries());
+    }
+
+    @GetMapping("/{date}")
+    public ResponseEntity<DsrEntry> getEntryByDate(@PathVariable String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        return dsrService.getEntryByDate(localDate).map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
