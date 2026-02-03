@@ -1,14 +1,14 @@
 com/deccan/petroconnect/PetroConnectApplication.class
+com/deccan/petroconnect/entities/NozzleReading.class
 com/deccan/petroconnect/controllers/AuthController$2.class
-com/deccan/petroconnect/controllers/DsrController$1.class
 com/deccan/petroconnect/config/SecurityConfig.class
 com/deccan/petroconnect/repository/UserRepository.class
 com/deccan/petroconnect/repository/PetrolStationRepository.class
-com/deccan/petroconnect/controllers/DsrController$2.class
 com/deccan/petroconnect/dto/RegisterRequest.class
 com/deccan/petroconnect/controllers/AuthController$4.class
 com/deccan/petroconnect/entity/PetrolStation.class
 com/deccan/petroconnect/services/DsrService.class
+com/deccan/petroconnect/services/DsrService$1.class
 com/deccan/petroconnect/controllers/AuthController$1.class
 com/deccan/petroconnect/config/JwtAuthenticationFilter.class
 com/deccan/petroconnect/dto/LoginRequest.class

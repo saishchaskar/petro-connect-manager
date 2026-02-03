@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.time.LocalDate; // Import
 
 @RestController
 @RequestMapping("/api/auth")
@@ -57,6 +58,7 @@ public class AuthController {
             station.setContactNumber(registerRequest.getContactNumber());
             station.setEmail(registerRequest.getEmail());
             station.setAddress(registerRequest.getAddress());
+            station.setCreatedAt(java.time.LocalDate.now());
             PetrolStation savedStation = petrolStationRepository.save(station);
 
             // 2. Create and save the User
@@ -105,6 +107,13 @@ public class AuthController {
             response.put("token", authToken);
             response.put("username", loginRequest.getUsername());
             response.put("station_configured", isConfigured);
+
+            if (isConfigured && user.getPetrolStation().getCreatedAt() != null) {
+                response.put("station_created_at", user.getPetrolStation().getCreatedAt().toString());
+            } else {
+                response.put("station_created_at", LocalDate.now().toString());
+
+            }
 
             return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {

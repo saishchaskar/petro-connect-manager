@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
+import java.time.LocalDate;
 
 @Entity
 @Data
@@ -22,4 +23,5 @@ public class PetrolStation {
     private String contactNumber;
     private String email;
     private String address;
+    private LocalDate createdAt;
 }

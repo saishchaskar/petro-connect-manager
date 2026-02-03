@@ -2,13 +2,14 @@ package com.deccan.petroconnect.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
 @Data
-@Table(name = "dsr_entry")
+@Table(name = "dsr_entry", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"date", "shift_type"})
+})
 public class DsrEntry {
     
     @Id
@@ -17,21 +18,29 @@ public class DsrEntry {
     
     @Column(nullable = false)
     private LocalDate date;
-    
-    @Column(precision = 12, scale = 3)
-    private BigDecimal startingReading;
-    
-    @Column(precision = 12, scale = 3)
-    private BigDecimal endingReading;
-    
-    @Column(precision = 12, scale = 3)
-    private BigDecimal sales;
+
+    @Column(name = "shift_type", nullable = false)
+    private String shiftType;
+
+    // We use "TEXT" or "LONGTEXT" to store the large JSON blob from the frontend
+    @Lob
+    @Column(name = "json_data", columnDefinition = "TEXT")
+    private String jsonData;
     
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
     
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+    
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

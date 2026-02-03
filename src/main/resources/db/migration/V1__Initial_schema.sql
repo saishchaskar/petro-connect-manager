@@ -1,4 +1,4 @@
--- V1__Initial_schema.sql
+-- resources/db/migration/V1__Initial_schema.sql
 
 -- Create Petrol Station Table
 CREATE TABLE petrol_stations (
@@ -8,7 +8,8 @@ CREATE TABLE petrol_stations (
     dealer_name VARCHAR(255),
     contact_number VARCHAR(20),
     email VARCHAR(255),
-    address VARCHAR(500)
+    address VARCHAR(500),
+    created_at DATE
 );
 
 -- Create User Table
@@ -24,10 +25,19 @@ CREATE TABLE users (
 CREATE TABLE dsr_entry (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     date DATE NOT NULL,
-    starting_reading DECIMAL(12, 3) DEFAULT 0,
-    ending_reading DECIMAL(12, 3) DEFAULT 0,
-    sales DECIMAL(12, 3) DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    shift_type VARCHAR(20) NOT NULL,
+    json_data CLOB,  -- Changed to CLOB to match Hibernate @Lob expectation
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT uk_dsr_date_shift UNIQUE (date, shift_type)
+);
+
+-- Create Nozzle Readings Table
+CREATE TABLE nozzle_readings (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nozzle_id VARCHAR(100) NOT NULL,
+    starting_reading DOUBLE,
+    ending_reading DOUBLE
 );
 
 -- Create indexes for performance
