@@ -19,5 +19,6 @@ com/deccan/petroconnect/controllers/AuthController$5.class
 com/deccan/petroconnect/controllers/AuthController.class
 com/deccan/petroconnect/services/JwtTokenProvider.class
 com/deccan/petroconnect/repositories/DsrEntryRepository.class
+com/deccan/petroconnect/dtos/AnalyticsDTO.class
 com/deccan/petroconnect/controllers/DsrController.class
 com/deccan/petroconnect/services/CustomUserDetailsService.class

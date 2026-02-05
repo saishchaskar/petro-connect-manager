@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.deccan.petroconnect.dtos.AnalyticsDTO;
+import org.springframework.transaction.annotation.Transactional; // Import Transactional
 
 import java.time.LocalDate;
 import java.util.*;
@@ -23,22 +25,100 @@ public class DsrService {
         return dsrEntryRepository.findByDateAndShiftType(date, shift).orElse(null);
     }
 
+    @Transactional // Ensure both saves happen or neither
     public void saveDsrEntry(LocalDate date, String shift, Map<String, Object> data) {
         try {
-            // Convert the entire frontend object to a JSON string
+            // 1. SAVE THE CURRENT SHIFT
             String jsonContent = objectMapper.writeValueAsString(data);
-            
             DsrEntry entry = dsrEntryRepository.findByDateAndShiftType(date, shift)
                     .orElse(new DsrEntry());
             
             entry.setDate(date);
             entry.setShiftType(shift);
             entry.setJsonData(jsonContent); 
-            
             dsrEntryRepository.save(entry);
+
+            // 2. AUTO-UPDATE NEXT SHIFT (The Fix)
+            propagateReadingsToNextShift(date, shift, data);
+
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error serializing shift data", e);
         }
+    }
+
+    private void propagateReadingsToNextShift(LocalDate currentDate, String currentShift, Map<String, Object> currentData) {
+        // Logic to find the immediate next shift
+        LocalDate nextDate;
+        String nextShift;
+
+        if ("Day".equalsIgnoreCase(currentShift)) {
+            nextDate = currentDate;
+            nextShift = "Night";
+        } else {
+            nextDate = currentDate.plusDays(1);
+            nextShift = "Day";
+        }
+
+        // Fetch the next shift if it exists
+        Optional<DsrEntry> nextEntryOpt = dsrEntryRepository.findByDateAndShiftType(nextDate, nextShift);
+        
+        if (nextEntryOpt.isPresent()) {
+            try {
+                DsrEntry nextEntry = nextEntryOpt.get();
+                Map<String, Object> nextData = objectMapper.readValue(nextEntry.getJsonData(), Map.class);
+                
+                // Get the nozzle lists
+                List<Map<String, Object>> currentNozzles = (List<Map<String, Object>>) currentData.get("nozzles");
+                List<Map<String, Object>> nextNozzles = (List<Map<String, Object>>) nextData.get("nozzles");
+
+                if (currentNozzles != null && nextNozzles != null) {
+                    boolean dataChanged = false;
+
+                    // Create a lookup map for the NEW ending readings
+                    Map<String, Double> newOpeningReadings = new HashMap<>();
+                    for (Map<String, Object> nozzle : currentNozzles) {
+                        newOpeningReadings.put((String) nozzle.get("nozzleId"), getDouble(nozzle, "endingReading"));
+                    }
+
+                    // Loop through NEXT shift's nozzles and update their STARTING reading
+                    for (Map<String, Object> nextNozzle : nextNozzles) {
+                        String id = (String) nextNozzle.get("nozzleId");
+                        
+                        if (newOpeningReadings.containsKey(id)) {
+                            Double correctOpening = newOpeningReadings.get(id);
+                            Double existingOpening = getDouble(nextNozzle, "startingReading");
+
+                            // Only update and save if values are different (prevents unnecessary writes)
+                            if (!Objects.equals(correctOpening, existingOpening)) {
+                                nextNozzle.put("startingReading", correctOpening);
+                                
+                                // OPTIONAL: Automatically recalculate 'readingDiff' for the next shift
+                                // so the math stays correct immediately
+                                Double nextEnding = getDouble(nextNozzle, "endingReading");
+                                if (nextEnding > 0) {
+                                    nextNozzle.put("readingDiff", nextEnding - correctOpening);
+                                    // You could also recalculate 'netSale' and 'amount' here if needed
+                                }
+                                
+                                dataChanged = true;
+                            }
+                        }
+                    }
+
+                    // Save the next shift if we made changes
+                    if (dataChanged) {
+                        nextEntry.setJsonData(objectMapper.writeValueAsString(nextData));
+                        dsrEntryRepository.save(nextEntry);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace(); // Log error but allow the main save to succeed
+            }
+        }
+    }
+
+    public List<AnalyticsDTO> getAnalyticsData(LocalDate start, LocalDate end) {
+        return dsrEntryRepository.getAnalyticsBetweenDates(start, end);
     }
 
     public List<Map<String, Object>> getMonthlyReport(int month, int year) {

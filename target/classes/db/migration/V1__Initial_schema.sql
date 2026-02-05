@@ -2,7 +2,7 @@
 
 -- Create Petrol Station Table
 CREATE TABLE petrol_stations (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     station_name VARCHAR(255) NOT NULL,
     station_code VARCHAR(50) NOT NULL UNIQUE,
     dealer_name VARCHAR(255),
@@ -14,7 +14,7 @@ CREATE TABLE petrol_stations (
 
 -- Create User Table
 CREATE TABLE users (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     username VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     petrol_station_id BIGINT,
@@ -23,10 +23,10 @@ CREATE TABLE users (
 
 -- Create DSR Entry Table
 CREATE TABLE dsr_entry (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     date DATE NOT NULL,
     shift_type VARCHAR(20) NOT NULL,
-    json_data CLOB,  -- Changed to CLOB to match Hibernate @Lob expectation
+    json_data JSONB,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT uk_dsr_date_shift UNIQUE (date, shift_type)
@@ -34,10 +34,10 @@ CREATE TABLE dsr_entry (
 
 -- Create Nozzle Readings Table
 CREATE TABLE nozzle_readings (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id BIGSERIAL PRIMARY KEY,
     nozzle_id VARCHAR(100) NOT NULL,
-    starting_reading DOUBLE,
-    ending_reading DOUBLE
+    starting_reading DOUBLE PRECISION,
+    ending_reading DOUBLE PRECISION
 );
 
 -- Create indexes for performance

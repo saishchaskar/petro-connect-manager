@@ -3,6 +3,8 @@ package com.deccan.petroconnect.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,9 +24,9 @@ public class DsrEntry {
     @Column(name = "shift_type", nullable = false)
     private String shiftType;
 
-    // We use "TEXT" or "LONGTEXT" to store the large JSON blob from the frontend
-    @Lob
-    @Column(name = "json_data", columnDefinition = "TEXT")
+    // Use @JdbcTypeCode to map the String field to the native JSONB type.
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "json_data", columnDefinition = "jsonb")
     private String jsonData;
     
     @Column(name = "created_at", updatable = false)

@@ -5,6 +5,7 @@ import com.deccan.petroconnect.services.DsrService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.deccan.petroconnect.dtos.AnalyticsDTO;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dsr")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 public class DsrController {
 
     @Autowired
@@ -55,6 +55,13 @@ public class DsrController {
             @RequestParam("month") int month,
             @RequestParam("year") int year) {
         return ResponseEntity.ok(dsrService.getMonthlyReport(month, year));
+    }
+
+    @GetMapping("/analytics")
+    public ResponseEntity<List<AnalyticsDTO>> getAnalytics(
+            @RequestParam("startDate") String startDate,
+            @RequestParam("endDate") String endDate) {
+        return ResponseEntity.ok(dsrService.getAnalyticsData(LocalDate.parse(startDate), LocalDate.parse(endDate)));
     }
         
     
