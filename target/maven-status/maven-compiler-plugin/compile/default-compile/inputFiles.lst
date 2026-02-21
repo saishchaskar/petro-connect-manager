@@ -3,7 +3,9 @@
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/config/SecurityConfig.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/controllers/AuthController.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/controllers/DsrController.java
+/home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/controllers/PetrolStationController.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/dtos/AnalyticsDTO.java
+/home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/dtos/UpdateConfigRequest.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/entities/DsrEntry.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/entities/LoginRequest.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/entities/NozzleReading.java
@@ -16,3 +18,4 @@
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/services/CustomUserDetailsService.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/services/DsrService.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/services/JwtTokenProvider.java
+/home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/services/PetrolStationService.java

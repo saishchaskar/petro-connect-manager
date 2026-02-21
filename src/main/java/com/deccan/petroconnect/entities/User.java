@@ -1,5 +1,6 @@
 package com.deccan.petroconnect.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,8 @@ public class User {
     private Long id;
 
     private String username;
+    
+    @Column(updatable = false)
     private String password;
 
     @OneToOne
