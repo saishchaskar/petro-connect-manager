@@ -8,6 +8,7 @@ com/deccan/petroconnect/services/PetrolStationService.class
 com/deccan/petroconnect/repository/PetrolStationRepository.class
 com/deccan/petroconnect/dto/RegisterRequest.class
 com/deccan/petroconnect/controllers/AuthController$4.class
+com/deccan/petroconnect/config/RequestResponseLoggingFilter.class
 com/deccan/petroconnect/entity/PetrolStation.class
 com/deccan/petroconnect/services/DsrService.class
 com/deccan/petroconnect/services/DsrService$1.class
