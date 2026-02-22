@@ -1,5 +1,6 @@
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/PetroConnectApplication.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/config/JwtAuthenticationFilter.java
+/home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/config/RequestResponseLoggingFilter.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/config/SecurityConfig.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/controllers/AuthController.java
 /home/unbox/Pictures/saish/projects/petrol-station-connect/backend/src/main/java/com/deccan/petroconnect/controllers/DsrController.java
